@@ -8,7 +8,7 @@ import carouselData from './MainCarouselData';
 
 const MainCarousel = () => {
     const items = carouselData.map((item) => (
-        <div className="cursor-pointer">
+        <div className="cursor-pointer z-0">
             <img
                 className='w-full'
                 src={item.imageUrl}
