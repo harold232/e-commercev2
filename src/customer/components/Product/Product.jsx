@@ -16,8 +16,9 @@ import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon, Squares2X2Icon } from
 import ProductCard from './ProductCard'
 import card_data from '../../../data/card_data'
 import { filters, singleFilter } from './FilterData'
-import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup } from '@mui/material'
+import { FormControlLabel, Radio, RadioGroup } from '@mui/material'
 import FilterListIcon from '@mui/icons-material/FilterList';
+import { useLocation, useNavigate } from 'react-router-dom'
 
 const sortOptions = [
     { name: 'Price: Low to High', href: '#', currenst: false },
@@ -30,6 +31,57 @@ function classNames(...classes) {
 
 export default function Product() {
     const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
+    const location = useLocation()
+    const navigate = useNavigate()
+
+    const handleFilter = (value, sectionId) => {
+        const searchParams = new URLSearchParams(location.search);
+        let filterValues = searchParams.get(sectionId)?.split(',') || [];
+
+        if (filterValues.includes(value)) {
+            // Remove value if already selected
+            filterValues = filterValues.filter(item => item !== value);
+        } else {
+            // Add value if not selected
+            filterValues.push(value);
+        }
+
+        if (filterValues.length > 0) {
+            searchParams.set(sectionId, filterValues.join(','));
+        } else {
+            searchParams.delete(sectionId);
+        }
+
+        // Update URL with new search params
+        navigate({
+            search: searchParams.toString() ? `?${searchParams.toString()}` : ''
+        });
+        /*
+        let filterValues = searchParams.get(sectionId);
+        if (filterValues.length > 0 && filterValues[0].split(",").includes(value)) {
+            filterValues = filterValues[0].split(",").filter((item) => item !== value);
+            if (filterValues.length === 0) {
+                searchParams.delete(sectionId);
+            }
+        } else {
+            filterValues.push(value);
+        }
+
+        if (filterValues.length > 0) {
+            searchParams.set(sectionId, filterValues.join(','));
+        }
+
+        const query = searchParams.toString();
+        navigate({ search: query ? `?${query}` : '' });*/
+    };
+
+    const handleRadioFilterChange = (e, sectionId) => {
+        const searchParams = new URLSearchParams(location.search);
+        searchParams.set(sectionId, e.target.value);
+
+        const query = searchParams.toString();
+        navigate({ search: query ? `?${query}` : '' });
+    }
 
     return (
         <div className="bg-white">
@@ -266,6 +318,7 @@ export default function Product() {
                                                             <div className="flex h-5 shrink-0 items-center">
                                                                 <div className="group grid size-4 grid-cols-1">
                                                                     <input
+                                                                        onChange={() => handleFilter(option.value, section.id)}
                                                                         defaultValue={option.value}
                                                                         defaultChecked={option.checked}
                                                                         id={`filter-${section.id}-${optionIdx}`}
@@ -323,7 +376,17 @@ export default function Product() {
                                                 <DisclosurePanel className="pt-6">
                                                     <div className="space-y-4">
                                                         {section.options.map((option, optionIdx) => (
-                                                            <FormControlLabel value={option.value} control={<Radio />} label={option.label} />
+                                                            <FormControlLabel
+                                                                key={option.value}
+                                                                onChange={(e) => handleRadioFilterChange(e, section.id)}
+                                                                value={option.value}
+                                                                control={
+                                                                    <Radio
+                                                                        checked={new URLSearchParams(location.search).get(section.id) === option.value}
+                                                                    />
+                                                                }
+                                                                label={option.label}
+                                                            />
                                                         ))}
                                                     </div>
                                                 </DisclosurePanel>
