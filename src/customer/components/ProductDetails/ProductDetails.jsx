@@ -108,28 +108,40 @@ export default function ProductDetails() {
                             />
                         </div>
                         <div className="flex flex-wrap space-x-5 justify-center">
-                            <div className="aspect-h-2 aspect-w-3 overflow-hidden rounded-lg max-w-[5rem] max-h-[5rem] mt-4">
-                                <img
-                                    alt={product.images[1].alt}
-                                    src={product.images[1].src}
-                                    className="aspect-3/2 w-full rounded-lg object-cover"
-                                />
-                            </div>
+                            {product.images.map((image) =>
+                                <div className="aspect-h-2 aspect-w-3 overflow-hidden rounded-lg max-w-[5rem] max-h-[5rem] mt-4">
+                                    <img
+                                        alt={image.alt}
+                                        src={image.src}
+                                        className="h-full w-full object-cover object-center"
+                                    />
+                                </div>
+                            )}
                         </div>
 
                     </div>
 
                     {/* Product info */}
-                    <div className="mx-auto max-w-2xl px-4 pt-10 pb-16 sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:grid-rows-[auto_auto_1fr] lg:gap-x-8 lg:px-8 lg:pt-16 lg:pb-24">
-                        <div className="lg:col-span-2 lg:border-r lg:border-gray-200 lg:pr-8">
-                            <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">{product.name}</h1>
+                    <div className="lg:col-span-1 maxt-auto max-w-2x1 px-4 pb-16 sm:px-6 lg:max-w-7x1 lg:px-8 lg-pb-24">
+                        <div className="lg:col-span-2">
+                            <h1 className="text-lg lg:text-x1 font-semibold text-gray-9000">Universaloutfit</h1>
+                            <h1 className="text-lg lg:text-x1 text-gray-900 opacity-60 pt-1">Casual Puff Sleeves SOlid Women White Top</h1>
                         </div>
 
                         {/* Options */}
                         <div className="mt-4 lg:row-span-3 lg:mt-0">
                             <h2 className="sr-only">Product information</h2>
-                            <p className="text-3xl tracking-tight text-gray-900">{product.price}</p>
-
+                            <div className="flex space-x-5 items-center text-lg lg:text-xl text-gray-900 mt-6">
+                                <p class="semibold">
+                                    $199
+                                </p>
+                                <p class="opacity-50 line-through">
+                                    $211
+                                </p>
+                                <p class="text-green-600 font-semibold">
+                                    5% off
+                                </p>
+                            </div>
                             {/* Reviews */}
                             <div className="mt-6">
                                 <h3 className="sr-only">Reviews</h3>
